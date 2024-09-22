@@ -15,6 +15,7 @@ namespace WatchTowerApi.Models
         [ForeignKey("HockeyPlayer")]
         public int PlayerID { get; set; }
 
+        // Reference to the Player's Team
         [ForeignKey("HockeyTeam")]
         public int TeamID { get; set; }
 

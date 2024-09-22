@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WatchTowerApi.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace WatchTowerApi.Controllers
 
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowSpecificOrigin")]
     [ApiController]
     public class HockeyLeagueController : ControllerBase
     {

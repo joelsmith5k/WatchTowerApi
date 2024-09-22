@@ -24,7 +24,18 @@ builder.Services.AddDbContext<WatchTowerContext>(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")  // Allow this origin
+               .AllowAnyHeader()                   // Allow any headers
+               .AllowAnyMethod();                  // Allow any methods
+    });
+});
+
 var app = builder.Build();
+app.UseCors();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -40,7 +51,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
