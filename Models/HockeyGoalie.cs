@@ -14,6 +14,9 @@ namespace WatchTowerApi.Models
         public int CurrentTeamID { get; set; }
 
         [Required]
+        public int LeagueID { get; set; }
+
+        [Required]
         [MaxLength(100)]
         public string GoalieCode { get; set; }
 
@@ -44,10 +47,14 @@ namespace WatchTowerApi.Models
         [ForeignKey("CurrentTeamID")]
         public virtual HockeyTeam HockeyTeam { get; set; }
 
-        // Navigation property for the one-to-many relationship with HockeyGoal
-        public virtual ICollection<HockeyGoal> HockeyGoals { get; set; } = new List<HockeyGoal>();
+        // Navigation property to represent the relationship with HockeyLeague
+        [ForeignKey("LeagueID")]
+        public virtual HockeyLeague HockeyLeague { get; set; }
 
-        // Navigation property for the one-to-many relationship with HockeyAssist
-        public virtual ICollection<HockeyAssist> HockeyAssists { get; set; } = new List<HockeyAssist>();
+        // // Navigation property for the one-to-many relationship with HockeyGoal
+        // public virtual ICollection<HockeyGoal> HockeyGoals { get; set; } = new List<HockeyGoal>();
+
+        // // Navigation property for the one-to-many relationship with HockeyAssist
+        // public virtual ICollection<HockeyAssist> HockeyAssists { get; set; } = new List<HockeyAssist>();
     }
 }

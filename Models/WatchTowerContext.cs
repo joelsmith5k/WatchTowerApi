@@ -12,7 +12,17 @@ public class WatchTowerContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        // Fluent API configurations, if any
+
+        // Setup foreign key references
+        modelBuilder.Entity<HockeyGoalie>()
+            .HasOne(b => b.HockeyLeague)
+            .WithMany(a => a.HockeyGoalies)
+            .HasForeignKey(b => b.LeagueID);
+
+        modelBuilder.Entity<HockeyGoalie>()
+            .HasOne(b => b.HockeyTeam)
+            .WithMany(a => a.HockeyGoalies)
+            .HasForeignKey(b => b.CurrentTeamID);
     }
 
     public DbSet<HockeyGoalie> HockeyGoalie{ get; set; } = null!;

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WatchTowerApi.Models
 {
@@ -22,6 +23,10 @@ namespace WatchTowerApi.Models
         public byte[] VersionCol { get; set; }
 
         // Navigation property to represent the relationship with HockeyTeam
+        [JsonIgnore]
         public virtual ICollection<HockeyTeam> HockeyTeams { get; set; }
+        
+        [JsonIgnore]
+        public virtual ICollection<HockeyGoalie> HockeyGoalies { get; set; }
     }
 }

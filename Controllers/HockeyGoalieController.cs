@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WatchTowerApi.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace WatchTowerApi.Controllers
 {
 
     [Route("api/[controller]")]
+    [EnableCors("AllowSpecificOrigin")]
     [ApiController]
     public class HockeyGoalieController : ControllerBase
     {
@@ -20,11 +22,11 @@ namespace WatchTowerApi.Controllers
             _context = context;
         }
 
-    // GET: api/HockeyGoalie
+        // GET: api/HockeyGoalie
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HockeyGoalie>>> GetHockeyGoalies()
         {
-            return await _context.HockeyGoalie.ToListAsync();
+            return await _context.HockeyGoalie.Include(b => b.HockeyLeague).ToListAsync();
         }
 
         // GET: api/HockeyGoalie/5
@@ -39,6 +41,22 @@ namespace WatchTowerApi.Controllers
             }
 
             return hockeyGoalie;
+        }
+
+        // GET: api/HockeyGoalie/5
+        [HttpGet("league/{id}")]
+        public async Task<ActionResult<IEnumerable<HockeyGoalie>>> GetHockeyGoaliesByLeague(int id)
+        {
+            var hockeyGoalies = await _context.HockeyGoalie.Where(g => g.LeagueID == id)
+                                                            .Include(g => g.HockeyLeague)
+                                                            .Include(g => g.HockeyTeam).ToListAsync();
+
+            if (hockeyGoalies == null)
+            {
+                return NotFound();
+            }
+
+            return hockeyGoalies;
         }
 
         // POST: api/HockeyGoalie
