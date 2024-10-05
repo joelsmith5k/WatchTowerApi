@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchTowerApi.Models;
+using Microsoft.AspNetCore.Cors;
+
 
 namespace WatchTowerApi.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowSpecificOrigin")]
     [ApiController]
     public class HockeyGoalController : ControllerBase
     {
@@ -32,6 +35,10 @@ namespace WatchTowerApi.Controllers
         {
             var goals = await _context.HockeyGoal
                                        .Where(hg => hg.GoalieID == goalieId)
+                                       .Include(hg => hg.HockeyPlayer)
+                                       .Include(hg => hg.HockeyTeam)
+                                       .Include(hg => hg.HockeyPosition)
+                                       .Include(hg => hg.HockeyGoalie)
                                        .ToListAsync();
 
             if (goals == null || !goals.Any())
