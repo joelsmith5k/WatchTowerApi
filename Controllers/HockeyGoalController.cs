@@ -48,5 +48,40 @@ namespace WatchTowerApi.Controllers
 
             return Ok(goals);
         }
+
+        // GET: api/HockeyGoals/goalie/{goalieId}/aggregate
+        [HttpGet("goalie/{goalieId}/aggregate")]
+        public async Task<ActionResult<IEnumerable<HockeyGoal>>> GetHockeyGoalSummariesByGoalieId(int goalieId)
+        {
+            var aggregatedGoals = await _context.HockeyGoal
+                                                .Where(hg => hg.GoalieID == goalieId)
+                                                .Include(hg => hg.HockeyPlayer)
+                                                .ThenInclude(hp => hp.DefaultTeam)
+                                                .GroupBy(entity => new
+                                                {
+                                                    entity.PlayerID,
+                                                    entity.HockeyPlayer.FirstName,
+                                                    entity.HockeyPlayer.LastName,
+                                                    entity.HockeyTeam.CityCode
+                                                })
+                                                .Select(group => new HockeyGoalSummaryGridItem()
+                                                {
+                                                    PlayerID = group.Key.PlayerID,
+                                                    FirstName = group.Key.FirstName,
+                                                    LastName = group.Key.LastName,
+                                                    CityCode = group.Key.CityCode,
+
+                                                    GoalCount = group.Count()
+                                                })
+                                                .ToListAsync();
+
+            if (aggregatedGoals == null || !aggregatedGoals.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(aggregatedGoals);
+        }
+
     }
 }
