@@ -83,5 +83,32 @@ namespace WatchTowerApi.Controllers
             return Ok(aggregatedGoals);
         }
 
+        [HttpGet("goalie/{goalieId}/pieChartData")]
+        public async Task<ActionResult<IEnumerable<HockeyGoal>>> GetHockeyGoalPieChartData(int goalieId)
+        {
+            var pieChartObjects = await _context.HockeyGoal
+                                                .Where(hg => hg.GoalieID == goalieId)
+                                                .Include(hg => hg.HockeyPlayer)
+                                                .ThenInclude(hp => hp.DefaultPosition)
+                                                .GroupBy(entity => new
+                                                {
+                                                    entity.HockeyPlayer.DefaultPosition.HockeyPositionCode
+                                                })
+                                                .Select(group => new HockeyGoalPieChartItem()
+                                                {
+                                                    PositionCode = group.Key.HockeyPositionCode,
+                                                    GoalCount = group.Count()
+                                                })
+                                                .ToListAsync();
+
+            if (pieChartObjects == null || !pieChartObjects.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(pieChartObjects);
+        }
+
+
     }
 }
