@@ -47,9 +47,10 @@ namespace WatchTowerApi.Controllers
         [HttpGet("league/{id}")]
         public async Task<ActionResult<IEnumerable<HockeyGoalie>>> GetHockeyGoaliesByLeague(int id)
         {
-            var hockeyGoalies = await _context.HockeyGoalie.Where(g => g.LeagueID == id)
+            var hockeyGoalies = await _context.HockeyGoalie.Where(g => g.LeagueID == id && g.HockeyGoals.Any())
                                                             .Include(g => g.HockeyLeague)
-                                                            .Include(g => g.HockeyTeam).ToListAsync();
+                                                            .Include(g => g.HockeyTeam)
+                                                            .OrderBy(g => g.LastName).ToListAsync();
 
             if (hockeyGoalies == null)
             {

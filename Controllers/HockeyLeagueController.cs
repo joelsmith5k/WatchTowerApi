@@ -26,7 +26,7 @@ namespace WatchTowerApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HockeyLeague>>> GetHockeyLeagues()
         {
-            return await _context.HockeyLeague.ToListAsync();
+            return await _context.HockeyLeague.Where(a => a.HockeyGoalies.Any()).ToListAsync();
         }
 
         // GET: api/HockeyLeague/5
