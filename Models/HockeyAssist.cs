@@ -15,8 +15,11 @@ namespace WatchTowerApi.Models
         [ForeignKey("HockeyPlayer")]
         public int PlayerID { get; set; }
 
-        [ForeignKey("HockeyTeam")]
-        public int TeamID { get; set; }
+        [ForeignKey(nameof(PlayerTeam))]
+        public int PlayerTeamID { get; set; }
+
+        [ForeignKey(nameof(GoalieTeam))]
+        public int GoalieTeamID { get; set; }
 
         [ForeignKey("HockeyPosition")]
         public int? PositionID { get; set; }
@@ -30,7 +33,7 @@ namespace WatchTowerApi.Models
         [StringLength(3)]
         public string? PositionY { get; set; }
 
-        public DateTime? Date { get; set; }
+        public DateTime? AssistDate { get; set; }
 
         [Timestamp]
         public byte[] VersionCol { get; set; }
@@ -38,7 +41,8 @@ namespace WatchTowerApi.Models
         // Navigation properties
         public virtual HockeyGoalie HockeyGoalie { get; set; }
         public virtual HockeyPlayer HockeyPlayer { get; set; }
-        public virtual HockeyTeam HockeyTeam { get; set; }
+        public virtual HockeyTeam PlayerTeam { get; set; }
+        public virtual HockeyTeam GoalieTeam { get; set; }
         public virtual HockeyPosition HockeyPosition { get; set; }
     }
 }

@@ -34,7 +34,8 @@ namespace WatchTowerApi.Controllers
             var assists = await _context.HockeyAssist
                                         .Where(ha => ha.GoalieID == goalieId)
                                         .Include(ha => ha.HockeyPlayer)
-                                        .Include(ha => ha.HockeyTeam)
+                                        .Include(ha => ha.PlayerTeam)
+                                        .Include(ha => ha.GoalieTeam)
                                         .Include(ha => ha.HockeyPosition)
                                         .Include(ha => ha.HockeyGoalie)
                                         .ToListAsync();
@@ -60,7 +61,7 @@ namespace WatchTowerApi.Controllers
                                                     entity.PlayerID,
                                                     entity.HockeyPlayer.FirstName,
                                                     entity.HockeyPlayer.LastName,
-                                                    entity.HockeyTeam.CityCode
+                                                    entity.HockeyPlayer.DefaultTeam.CityCode
                                                 })
                                                 .Select(group => new HockeyAssistSummaryGridItem()
                                                 {

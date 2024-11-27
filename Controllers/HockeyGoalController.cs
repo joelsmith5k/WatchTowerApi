@@ -36,7 +36,8 @@ namespace WatchTowerApi.Controllers
             var goals = await _context.HockeyGoal
                                        .Where(hg => hg.GoalieID == goalieId)
                                        .Include(hg => hg.HockeyPlayer)
-                                       .Include(hg => hg.HockeyTeam)
+                                       .Include(hg => hg.PlayerTeam)
+                                       .Include(hg => hg.GoalieTeam)
                                        .Include(hg => hg.HockeyPosition)
                                        .Include(hg => hg.HockeyGoalie)
                                        .ToListAsync();
@@ -62,7 +63,7 @@ namespace WatchTowerApi.Controllers
                                                     entity.PlayerID,
                                                     entity.HockeyPlayer.FirstName,
                                                     entity.HockeyPlayer.LastName,
-                                                    entity.HockeyTeam.CityCode
+                                                    entity.HockeyPlayer.DefaultTeam.CityCode
                                                 })
                                                 .Select(group => new HockeyGoalSummaryGridItem()
                                                 {
