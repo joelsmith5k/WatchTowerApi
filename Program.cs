@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        builder.WithOrigins("http://localhost:4200")  // Allow this origin
+        builder.WithOrigins("http://localhost:4200", "https://gray-dune-016edb11e.5.azurestaticapps.net/")  // Allow this origin
                .AllowAnyHeader()                   // Allow any headers
                .AllowAnyMethod();                  // Allow any methods
     });
