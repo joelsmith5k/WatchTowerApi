@@ -28,14 +28,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        builder.WithOrigins("http://localhost:4200", "https://gray-dune-016edb11e.5.azurestaticapps.net/")  // Allow this origin
-               .AllowAnyHeader()                   // Allow any headers
-               .AllowAnyMethod();                  // Allow any methods
+        builder.WithOrigins("http://localhost:4200", "https://gray-dune-016edb11e.5.azurestaticapps.net")  // Allow this origin
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .WithMethods("GET", "POST", "OPTIONS");
     });
 });
 
 var app = builder.Build();
-app.UseCors();
+app.UseCors("AllowSpecificOrigin");
 
 using (var scope = app.Services.CreateScope())
 {
